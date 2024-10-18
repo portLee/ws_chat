@@ -16,9 +16,12 @@
 <body>
     <div class="container" id="app" v-cloak>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <h3>채팅방 리스트</h3>
             </div>
+        </div>
+        <div class="col-md-6 text-right">
+            <a class="btn btn-primary btn-sm" href="/logout">로그아웃</a>
         </div>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -30,7 +33,7 @@
             </div>
         </div>
         <ul class="list-group">
-            <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId)">
+            <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId, item.name)">
                 {{item.name}}
             </li>
         </ul>
@@ -78,13 +81,10 @@
                             });
                     }
                 },
-                enterRoom(roomId) { // 특정 채팅방에 입장하는 메서드
-                    const sender = prompt('대화명을 입력해 주세요.'); // 사용자에게 대화명 입력 요청
-                    if (sender !== "") { // 대화명이 비어있지 않으면
-                        localStorage.setItem('wschat.sender', sender); // localStorage에 대화명 저장
-                        localStorage.setItem('wschat.roomId', roomId); // localStorage에 roomId 저장
-                        location.href = "/chat/room/enter/" + roomId; // 선택한 채팅방으로 이동
-                    }
+                enterRoom(roomId, roomName) { // 특정 채팅방에 입장하는 메서드
+                    localStorage.setItem('wschat.roomId', roomId); // localStorage에 roomId 저장
+                    localStorage.setItem('wschat.roomName', roomName); // localStorage에 roomName 저장
+                    location.href = "/chat/room/enter/" + roomId; // 선택한 채팅방으로 이동
                 }
             }
         });
