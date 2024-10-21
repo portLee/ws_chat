@@ -32,8 +32,8 @@ public class ChatRoomController { // 채팅방 관련 요청을 처리하는 컨
         String name = auth.getName();
         // 로그인 정보와 JWT 토큰을 포함한 LoginInfo 객체를 빌더 패턴으로 생성하여 반환
         return LoginInfo.builder()
-                .name(name).
-                token(jwtTokenProvider.generateToken(name)) // 사용자 이름으로 JWT 토큰 생성
+                .name(name)
+                .token(jwtTokenProvider.generateToken(name)) // 사용자 이름으로 JWT 토큰 생성
                 .build();
     }
 
@@ -44,7 +44,9 @@ public class ChatRoomController { // 채팅방 관련 요청을 처리하는 컨
     @GetMapping("/rooms") // "/chat/rooms" GET 요청을 처리
     @ResponseBody // 반환 데이터를 JSON 형식으로 변환하여 응답
     public List<ChatRoom> room() { // 모든 채팅방 목록을 반환하는 메서드
-        return chatRoomRepository.findAllRoom(); // 저장소에서 모든 채팅방을 조회하여 반환
+        List<ChatRoom> chatRooms = chatRoomRepository.findAllRoom(); // 모든 채팅방 조회
+        chatRooms.stream().forEach(room -> room.setUserCount(chatRoomRepository.getUserCount(room.getRoomId()))); // 각 채팅방의 인원 수 설정
+        return chatRooms; // 저장소에서 모든 채팅방을 조회하여 반환
     }
 
     @PostMapping("/room") // "/chat/room" POST 요청을 처리

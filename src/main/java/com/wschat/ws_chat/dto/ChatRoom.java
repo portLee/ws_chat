@@ -14,6 +14,7 @@ public class ChatRoom implements Serializable { // 채팅방을 나타내는 클
 
     private String roomId; // 채팅방 고유 ID
     private String name; // 채팅방 이름
+    private long userCount; // 채팅방 인원수
 
     public static ChatRoom create(String name) { // 채팅방을 생성하는 정적 메서드
         ChatRoom chatRoom = new ChatRoom(); // 새로운 ChatRoom 객체를 생성

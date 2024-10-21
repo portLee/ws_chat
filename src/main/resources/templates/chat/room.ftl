@@ -34,7 +34,7 @@
         </div>
         <ul class="list-group">
             <li class="list-group-item list-group-item-action" v-for="item in chatrooms" v-bind:key="item.roomId" v-on:click="enterRoom(item.roomId, item.name)">
-                {{item.name}}
+                <h6>{{item.name}} <span class="badge badge-info badge-pill">{{item.userCount}}</span></h6>
             </li>
         </ul>
     </div>
@@ -57,7 +57,8 @@
                 findAllRoom() { // 서버에서 모든 채팅방을 가져오는 메서드
                     axios.get('/chat/rooms') // '/chat/rooms' 엔드포인트로 GET 요청
                         .then(response => { // 성공적으로 응답이 돌아오면
-                            this.chatrooms = response.data; // 응답 데이터를 chatrooms 배열에 할당
+                            if (Object.prototype.toString.call(response.data) === "[object Array]")
+                                this.chatrooms = response.data; // 응답 데이터를 chatrooms 배열에 할당
                         })
                         .catch(error => { // 오류가 발생하면
                             console.log("방 목록을 가져오는데 실패했습니다: ", error); // 오류 메시지 출력

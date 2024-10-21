@@ -17,10 +17,11 @@
     <div class="container" id="app" v-cloak>
         <div class="row">
             <div class="col-md-6">
-                <h2>{{roomName}}</h2>
+                <h4>{{roomName}} <span class="badge badge-info badge-pill">{{userCount}}</span></h4>
             </div>
             <div class="col-md-6 text-right">
                 <a class="btn btn-primary btn-sm" href="/logout">로그아웃</a>
+                <a class="btn btn-info btn-sm" href="/chat/room">채팅방 나가기</a>
             </div>
         </div>
         <div class="input-group">
@@ -60,7 +61,8 @@
                     roomName: '', // 현재 채팅방 이름
                     message: '', // 사용자가 입력한 메시지
                     messages: [], // 채팅 메시지 목록
-                    token: '' // 사용자 토큰
+                    token: '', // 사용자 토큰
+                    userCount: 0
                 }
             },
             created() { // Vue 컴포넌트 생성 시 호출되는 lifecycle hook
@@ -77,7 +79,6 @@
                                 const recv = JSON.parse(message.body); // 수신된 메시지를 처리
                                 _this.recvMessage(recv); // 수신한 메시지를 처리
                             });
-                            _this.sendMessage('ENTER'); // 채팅방 입장 메시지 전송
                         }, function (error) { // 연결 실패 시
                             alert("서버 연결에 실패하였습니다. 다시 접속해 주십시요.");
                             location.href = "/chat/room"; // 채팅방 목록으로 이동
@@ -95,6 +96,7 @@
                     this.message = ''; // 메시지를 전송한 후 입력란 초기화
                 },
                 recvMessage(recv) { // 수신된 메시지를 메시지 목록에 추가하는 메서드
+                    this.userCount = recv.userCount;
                     this.messages.unshift({ // 메시지를 목록의 앞쪽에 추가
                         type: recv.type, // 메시지 타입
                         sender: recv.sender, // 메시지 발신자
